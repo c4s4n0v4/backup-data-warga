@@ -193,6 +193,10 @@ function getData() {
   }
 }
 
+function superNormalize(str) {
+  return String(str).toLowerCase().trim();
+}
+
 function addData(formObject, userCtx) {
   try {
     // Permission Check
@@ -213,47 +217,46 @@ function addData(formObject, userCtx) {
     
     var id = generateCustomId(formObject.tanggalLahir, formObject.wilayah);
     
+    // Construct Row Data
     var newRow = new Array(headers.length).fill("");
-    sheet.appendRow(newRow);
-    var rowNum = sheet.getLastRow();
     
-    var setVal = (names, val) => {
+    var setArr = (names, val) => {
        for(var i=0; i<names.length; i++) {
          var key = names[i].toLowerCase().trim();
          if(map.hasOwnProperty(key)) {
-           var colNum = map[key] + 1;
-           var cell = sheet.getRange(rowNum, colNum);
-           cell.clearDataValidations(); 
-           cell.setValue(val);
+           newRow[map[key]] = val;
            return;
          }
        }
     };
 
-    setVal(['ID'], id);
-    setVal(['NIK'], "'" + formObject.nik);
-    setVal(['No KK', 'No. KK'], "'" + formObject.noKK);
-    setVal(['Nama Lengkap', 'Nama'], formObject.nama);
-    setVal(['Jenis Kelamin'], formObject.jk);
-    setVal(['Hubungan Keluarga', 'Hubungan'], formObject.hubKeluarga);
-    setVal(['Tempat Lahir'], formObject.tempatLahir);
-    setVal(['Tanggal Lahir'], formObject.tanggalLahir);
-    setVal(['Nama Suami', 'Suami'], formObject.namaSuami);
-    setVal(['Nama Istri', 'Istri'], formObject.namaIstri);
-    setVal(['Nama Ayah'], formObject.namaAyah);
-    setVal(['Nama Ibu'], formObject.namaIbu);
-    setVal(['Alamat'], formObject.alamat);
-    setVal(['No HP'], "'" + formObject.noHp);
-    setVal(['Wilayah'], formObject.wilayah);
-    setVal(['Status Keluarga'], formObject.statusKeluarga);
-    setVal(['Status Bekerja', 'Status'], formObject.statusBekerja);
-    setVal(['Tanggal Baptis'], formObject.tanggalBaptis);
-    setVal(['Golongan Darah'], formObject.golDarah);
-    setVal(['Tanggal Kematian'], formObject.tanggalKematian);
-    setVal(['Pendidikan Terakhir', 'Pendidikan'], formObject.pendidikan);
-    setVal(['Kategorial'], formObject.kategorial);
-    setVal(['Pekerjaan'], formObject.pekerjaan);
-    setVal(['Catatan'], formObject.catatan);
+    setArr(['ID'], id);
+    setArr(['NIK'], "'" + formObject.nik);
+    setArr(['No KK', 'No. KK'], "'" + formObject.noKK);
+    setArr(['Nama Lengkap', 'Nama'], formObject.nama);
+    setArr(['Jenis Kelamin'], formObject.jk);
+    setArr(['Hubungan Keluarga', 'Hubungan'], formObject.hubKeluarga);
+    setArr(['Tempat Lahir'], formObject.tempatLahir);
+    setArr(['Tanggal Lahir'], formObject.tanggalLahir);
+    setArr(['Nama Suami', 'Suami'], formObject.namaSuami);
+    setArr(['Nama Istri', 'Istri'], formObject.namaIstri);
+    setArr(['Nama Ayah'], formObject.namaAyah);
+    setArr(['Nama Ibu'], formObject.namaIbu);
+    setArr(['Alamat'], formObject.alamat);
+    setArr(['No HP'], "'" + formObject.noHp);
+    setArr(['Wilayah'], formObject.wilayah);
+    setArr(['Status Keluarga'], formObject.statusKeluarga);
+    setArr(['Status Bekerja', 'Status'], formObject.statusBekerja);
+    setArr(['Tanggal Baptis'], formObject.tanggalBaptis);
+    setArr(['Golongan Darah'], formObject.golDarah);
+    setArr(['Tanggal Kematian'], formObject.tanggalKematian);
+    setArr(['Pendidikan Terakhir', 'Pendidikan'], formObject.pendidikan);
+    setArr(['Kategorial'], formObject.kategorial);
+    setArr(['Pekerjaan'], formObject.pekerjaan);
+    setArr(['Catatan'], formObject.catatan);
+    
+    // Append once
+    sheet.appendRow(newRow);
     
     return "Sukses! ID: " + id;
   } catch (e) {

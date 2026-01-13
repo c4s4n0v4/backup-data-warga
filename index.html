@@ -954,6 +954,12 @@
                         class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4" id="familyListContainer"></div>
+                <!-- New Footer for Copy Button -->
+                <div class="modal-footer border-0 p-3 pt-0">
+                    <button type="button" class="btn btn-success rounded-pill px-4 w-100" id="btnCopyFamily">
+                        <i class="bi bi-whatsapp me-2"></i>Salin Data Keluarga
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1080,20 +1086,30 @@
 
         function handleLogin(e) {
             if (e) e.preventDefault();
+
+            // Hard Reset
+            currentUser = null;
+
             var uEl = document.getElementById('uName'), pEl = document.getElementById('uPass');
             if (!uEl || !pEl) return;
             var u = uEl.value, p = pEl.value;
+
             showLoading(true);
             google.script.run.withSuccessHandler(function (res) {
                 showLoading(false);
-                if (res.success) {
+                if (res && res.success === true) {
                     currentUser = { role: res.role, wilayah: res.wilayah, username: res.username };
                     enterApp();
                 } else {
-                    Swal.fire('Gagal', res.message, 'error');
+                    currentUser = null; // Ensure null
+                    var msg = (res && res.message) ? res.message : 'Login gagal.';
+                    Swal.fire('Gagal', msg, 'error');
+                    // Optional: Clear password
+                    // pEl.value = ''; 
                 }
             }).withFailureHandler(function (err) {
                 showLoading(false);
+                currentUser = null;
                 Swal.fire('Error', err.message, 'error');
             }).loginUser(u, p);
         }
@@ -1578,26 +1594,7 @@
         }
 
         function editDataByRecord(r) {
-            // Find index in filteredData if possible, otherwise just use the record directly
-            // Actually, existing edit logic might rely on index for saving? 
-            // Let's assume editDataByIndex needs refactoring or we use a workaround.
-            // If we don't have index, we can just open modal with data. 
-            // BUT handleFormSubmit usually needs to know if it's Edit mode.
-            // Let's rely on filling the form with ID.
-
-            // Check if we can find it in filteredData to keep consistency
-            var idx = filteredData.findIndex(function (d) { return d.id === r.id; });
-            if (idx >= 0) {
-                editDataByIndex(idx);
-            } else {
-                // Not in filtered list, but we can still edit.
-                // We need to polyfill what editDataByIndex does.
-                // Let's assign a temporary index or just fill the form.
-                fillFormWithData(r); // We need to verify if this function exists or logic is inline.
-                // Looking at previous code, editDataByIndex likely calls openModal with data.
-                // Let's check openModal.
-                openModal(r);
-            }
+            openModal('edit', r);
         }
 
         function showDetailsByData(r) {
@@ -1694,13 +1691,64 @@
 
                 var nameDisplay = m.nama;
                 if (!isGuest && currentUser && currentUser.role === 'SUPER_ADMIN') {
-                    nameDisplay = '<span class="text-primary fw-bold" style="cursor:pointer; text-decoration: underline;" onclick="showDetailsById(\'' + m.id + '\')" title="Klik untuk edit detail">' + m.nama + '</span>';
+                    nameDisplay = '<span class="text-primary fw-bold" style="cursor:pointer; text-decoration: underline;" onclick="editDataById(\'' + m.id + '\')" title="Klik untuk edit data">' + m.nama + '</span>';
                 }
 
                 return '<div class="list-group-item d-flex justify-content-between align-items-center mb-1 border-0 shadow-sm rounded-3"><div><h6 class="mb-0 fw-bold">' + roleIcon + nameDisplay + ' ' + jkI + '</h6><small class="text-muted">' + m.hubKeluarga + ' | NIK: ' + nikDisplay + '</small></div><span class="badge bg-light text-dark border">' + m.age + ' Thn</span></div>';
             }).join('') + '</div>';
             if (!fModal) fModal = new bootstrap.Modal(document.getElementById('familyModal'));
+
+            // Set Copy Button Handler
+            var btnCopy = document.getElementById('btnCopyFamily');
+            if (btnCopy) {
+                btnCopy.onclick = function () { copyFamilyText(noKK, name); };
+            }
+
             fModal.show();
+        }
+
+        function copyFamilyText(noKK, headName) {
+            if (!noKK) return;
+            var members = globalData.filter(function (m) { return m.noKK === noKK; });
+
+            // Sort: Kepala Keluarga -> Istri -> Others (Age Desc)
+            members.sort(function (a, b) {
+                var roleScore = function (r) {
+                    if (r === 'Kepala Keluarga') return 0;
+                    if (r === 'Istri') return 1;
+                    return 2;
+                };
+                var ra = roleScore(a.hubKeluarga);
+                var rb = roleScore(b.hubKeluarga);
+                if (ra !== rb) return ra - rb;
+                return b.age - a.age; // Older first for children
+            });
+
+            var text = "*Data Keluarga " + headName + "*\nNo KK: " + noKK + "\n\n";
+            members.forEach(function (m, i) {
+                var dob = m.tanggalLahir ? (" (" + m.tanggalLahir + ")") : "";
+                text += (i + 1) + ". " + m.nama + dob + "\n";
+            });
+            text += "\nMohon dikoreksi jika ada kesalahan data.";
+
+            navigator.clipboard.writeText(text).then(function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tersalin!',
+                    text: 'Data keluarga telah disalin. Siap ditempel di WhatsApp.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }).catch(function (err) {
+                console.error(err);
+                Swal.fire('Error', 'Gagal menyalin teks', 'error');
+            });
+        }
+
+        // Helper for direct edit
+        function editDataById(id) {
+            var r = globalData.find(function (d) { return d.id === id; });
+            if (r) editDataByRecord(r);
         }
 
         function openModal(mode, data) {
@@ -1726,21 +1774,67 @@
 
         function handleFormSubmit(e) {
             if (e) e.preventDefault();
-            var fields = ['id', 'nik', 'noKK', 'nama', 'jk', 'hubKeluarga', 'golDarah', 'tanggalLahir', 'tempatLahir', 'namaSuami', 'namaIstri', 'namaAyah', 'namaIbu', 'pendidikan', 'wilayah', 'statusKeluarga', 'statusBergereja', 'alamat', 'noHp', 'tanggalBaptis', 'tanggalKematian', 'catatan', 'kategorial', 'pekerjaan'];
-            var obj = {}; fields.forEach(function (f) { var el = document.getElementById(f === 'id' ? 'dataId' : f); if (el) obj[f] = el.value; });
+            try {
+                var fields = ['id', 'nik', 'noKK', 'nama', 'jk', 'hubKeluarga', 'golDarah', 'tanggalLahir', 'tempatLahir', 'namaSuami', 'namaIstri', 'namaAyah', 'namaIbu', 'pendidikan', 'wilayah', 'statusKeluarga', 'statusBergereja', 'alamat', 'noHp', 'tanggalBaptis', 'tanggalKematian', 'catatan', 'kategorial', 'pekerjaan'];
+                var obj = {};
+                fields.forEach(function (f) {
+                    var el = document.getElementById(f === 'id' ? 'dataId' : f);
+                    if (el) obj[f] = el.value;
+                });
 
-            showLoading(true); if (myModal) myModal.hide();
-            var hS = function () { Swal.fire('Sukses'); loadData(); };
-            var hF = function (err) { showLoading(false); Swal.fire('Error', err.message); };
-            var runner = google.script.run.withSuccessHandler(hS).withFailureHandler(hF);
-            if (obj.id) runner.updateData(obj, currentUser); else runner.addData(obj, currentUser);
+                // Sanitize ID
+                if (!obj.id) delete obj.id;
+
+                // Validate required
+                if (!obj.nama || !obj.nik) {
+                    Swal.fire('Warning', 'Nama dan NIK wajib diisi', 'warning');
+                    return;
+                }
+
+                showLoading(true);
+                if (myModal) myModal.hide();
+
+                var hS = function () {
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: 'Data berhasil disimpan',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    loadData();
+                };
+                var hF = function (err) {
+                    showLoading(false);
+                    // If modal was hidden, showing error here is fine
+                    Swal.fire('Error', 'Gagal menyimpan: ' + err.message, 'error');
+                    // Optionally reopen modal?
+                    if (myModal) myModal.show();
+                };
+
+                var runner = google.script.run.withSuccessHandler(hS).withFailureHandler(hF);
+                if (obj.id) {
+                    runner.updateData(obj, currentUser);
+                } else {
+                    runner.addData(obj, currentUser);
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire('Client Error', err.message, 'error');
+            }
         }
 
         function deleteData(id) {
-            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(function (r) {
+            Swal.fire({ title: 'Hapus?', text: 'Data tidak dapat dikembalikan', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus' }).then(function (r) {
                 if (r.isConfirmed) {
                     showLoading(true);
-                    google.script.run.withSuccessHandler(function () { Swal.fire('Terhapus'); loadData(); }).withFailureHandler(function (e) { showLoading(false); Swal.fire('Error', e.message); }).deleteData(id, currentUser);
+                    google.script.run.withSuccessHandler(function () {
+                        Swal.fire('Terhapus', 'Data telah dihapus', 'success');
+                        loadData();
+                    }).withFailureHandler(function (e) {
+                        showLoading(false);
+                        Swal.fire('Error', e.message, 'error');
+                    }).deleteData(id, currentUser);
                 }
             });
         }
