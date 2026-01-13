@@ -142,48 +142,74 @@
             border: none !important;
         }
 
-        /* Quick Filters & Pills */
+        /* Quick Filters & Pills - WRAPPED */
         .quick-filter-scroll {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
+            display: block;
+            /* Removed flex scroll */
             padding: 5px 0 15px 0;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .quick-filter-scroll::-webkit-scrollbar {
-            display: none;
         }
 
         .pill-group {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 8px;
-            white-space: nowrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
 
 
         .pill-label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            color: #888;
+            color: #666;
             text-transform: uppercase;
             white-space: nowrap;
-            margin-right: 5px;
+            margin-right: 10px;
+            min-width: 80px;
+            /* Ensure alignment */
         }
 
         .pill-btn {
             white-space: nowrap;
-            padding: 6px 16px;
+            padding: 8px 18px;
+            /* Larger touch target */
             border-radius: 50px;
             border: 1px solid #dee2e6;
             background: white;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
+            /* Larger font */
             color: #555;
             transition: all 0.2s;
             cursor: pointer;
+            flex-grow: 0;
+            /* Don't stretch unnecessarily */
+        }
+
+        @media (max-width: 768px) {
+            .pill-label {
+                width: 100%;
+                /* Force label to own line */
+                margin-bottom: 5px;
+                font-size: 0.9rem;
+            }
+
+            .pill-btn {
+                padding: 10px 20px;
+                /* Even easier to tap */
+                font-size: 1rem;
+                flex-grow: 1;
+                /* Make buttons fill width nicely */
+                text-align: center;
+            }
+
+            .pill-group {
+                padding: 15px;
+            }
         }
 
         .pill-btn:hover {
@@ -615,29 +641,53 @@
             <div class="quick-filter-scroll mb-3 mt-2">
                 <div class="pill-group">
                     <span class="pill-label">Wilayah:</span>
-                    <button class="pill-btn active" onclick="setPill('Wilayah', '')" data-pill-wilayah="">Semua</button>
-                    <button class="pill-btn" onclick="setPill('Wilayah', 'Barat')"
-                        data-pill-wilayah="Barat">Barat</button>
-                    <button class="pill-btn" onclick="setPill('Wilayah', 'Timur')"
-                        data-pill-wilayah="Timur">Timur</button>
-                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tengah')"
-                        data-pill-wilayah="Tengah">Tengah</button>
-                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tandon')"
-                        data-pill-wilayah="Tandon">Tandon</button>
-                    <button class="pill-btn" onclick="setPill('Wilayah', 'Gegeran')"
-                        data-pill-wilayah="Gegeran">Gegeran</button>
+                    <button class="pill-btn active" onclick="setPill('Wilayah', '')" data-pill-wilayah="">Semua <span
+                            id="count-wil-all" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Barat')" data-pill-wilayah="Barat">Barat <span
+                            id="count-wil-barat" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Timur')" data-pill-wilayah="Timur">Timur <span
+                            id="count-wil-timur" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tengah')" data-pill-wilayah="Tengah">Tengah
+                        <span id="count-wil-tengah" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tandon')" data-pill-wilayah="Tandon">Tandon
+                        <span id="count-wil-tandon" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Gegeran')" data-pill-wilayah="Gegeran">Gegeran
+                        <span id="count-wil-gegeran" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
                     <button class="pill-btn" onclick="setPill('Wilayah', 'Gemantar')"
-                        data-pill-wilayah="Gemantar">Gemantar</button>
+                        data-pill-wilayah="Gemantar">Gemantar <span id="count-wil-gemantar"
+                            class="badge bg-secondary rounded-pill ms-1" style="font-size:0.7em"></span></button>
                 </div>
                 <div class="vr mx-2 text-muted opacity-25"></div>
                 <div class="pill-group">
                     <span class="pill-label">Kategorial:</span>
-                    <button class="pill-btn active" onclick="setPill('Kat', '')" data-pill-kat="">Semua</button>
-                    <button class="pill-btn" onclick="setPill('Kat', 'Anak')" data-pill-kat="Anak">Anak</button>
-                    <button class="pill-btn" onclick="setPill('Kat', 'Remaja')" data-pill-kat="Remaja">Remaja</button>
-                    <button class="pill-btn" onclick="setPill('Kat', 'Pemuda')" data-pill-kat="Pemuda">Pemuda</button>
-                    <button class="pill-btn" onclick="setPill('Kat', 'Dewasa')" data-pill-kat="Dewasa">Dewasa</button>
-                    <button class="pill-btn" onclick="setPill('Kat', 'Lansia')" data-pill-kat="Lansia">Lansia</button>
+                    <button class="pill-btn active" onclick="setPill('Kat', '')" data-pill-kat="">Semua <span
+                            id="count-kat-all" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Anak')" data-pill-kat="Anak">Anak <span
+                            id="count-kat-anak" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Remaja')" data-pill-kat="Remaja">Remaja <span
+                            id="count-kat-remaja" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Pemuda')" data-pill-kat="Pemuda">Pemuda <span
+                            id="count-kat-pemuda" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Dewasa')" data-pill-kat="Dewasa">Dewasa <span
+                            id="count-kat-dewasa" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Lansia')" data-pill-kat="Lansia">Lansia <span
+                            id="count-kat-lansia" class="badge bg-secondary rounded-pill ms-1"
+                            style="font-size:0.7em"></span></button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Meninggal')" data-pill-kat="Meninggal"
+                        style="border-color: #6c757d; color: #6c757d;"><i class="bi bi-flower1 me-1"></i>Meninggal <span
+                            class="badge bg-secondary rounded-pill ms-1" style="font-size:0.7em"
+                            id="count-kat-meninggal">0</span></button>
                 </div>
             </div>
         </div>
@@ -650,9 +700,9 @@
             <thead>
                 <tr>
                     <th width="50" class="super-only">ID</th>
-                    <th>No KK</th>
+                    <th id="thNoKK">No KK</th>
                     <th>Nama & NIK</th>
-                    <th>Hubungan</th>
+                    <th id="thHubungan">Hubungan</th>
                     <th width="40">JK</th>
                     <th>Umur</th>
                     <th>Pendidikan</th>
@@ -686,8 +736,12 @@
                         <input type="hidden" id="dataId" name="id">
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <div class="form-floating"><input type="text" class="form-control" id="noKK"
-                                        placeholder="No KK"><label>No. Kartu Keluarga (KK)</label></div>
+                                <label class="mb-1 small text-muted">No. Kartu Keluarga (KK)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="noKK" placeholder="No KK">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="searchKK()"
+                                        title="Cari KK dari Nama"><i class="bi bi-search"></i></button>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating"><select class="form-select" id="hubKeluarga"
@@ -1062,7 +1116,21 @@
                 passInput.type = checkbox.checked ? 'text' : 'password';
             }
         }
-
+        function handleSearchInput() {
+            var searchInput = document.getElementById('searchInput');
+            var clearBtn = document.getElementById('clearSearchBtn');
+            if (searchInput && clearBtn) {
+                clearBtn.style.display = searchInput.value.length > 0 ? 'block' : 'none';
+            }
+            applyFilters();
+        }
+        function clearSearch() {
+            var searchInput = document.getElementById('searchInput');
+            var clearBtn = document.getElementById('clearSearchBtn');
+            if (searchInput) searchInput.value = '';
+            if (clearBtn) clearBtn.style.display = 'none';
+            applyFilters();
+        }
         function doLogout() {
             currentUser = null;
             var lp = document.getElementById('loginPage');
@@ -1097,24 +1165,32 @@
             console.log("Loading data...");
             showLoading(true);
             google.script.run.withSuccessHandler(function (data) {
-                globalData = data.map(function (item) {
-                    item.age = calculateAge(item.tanggalLahir);
-                    return item;
-                });
-                globalData.sort(function (a, b) {
-                    var kkA = a.noKK || "ZZZZ", kkB = b.noKK || "ZZZZ";
-                    if (kkA !== kkB) return kkA.localeCompare(kkB);
-                    var rankA = getHubRank(a.hubKeluarga), rankB = getHubRank(b.hubKeluarga);
-                    if (rankA !== rankB) return rankA - rankB;
-                    if (a.hubKeluarga === 'Anak' && b.hubKeluarga === 'Anak') return b.age - a.age;
-                    return 0;
-                });
-                populateDatalists(globalData);
-                applyFilters();
-                showLoading(false);
+                try {
+                    globalData = data.map(function (item) {
+                        item.age = calculateAge(item.tanggalLahir);
+                        return item;
+                    });
+                    globalData.sort(function (a, b) {
+                        var kkA = a.noKK || "ZZZZ", kkB = b.noKK || "ZZZZ";
+                        if (kkA !== kkB) return kkA.localeCompare(kkB);
+                        var rankA = getHubRank(a.hubKeluarga), rankB = getHubRank(b.hubKeluarga);
+                        if (rankA !== rankB) return rankA - rankB;
+                        if (a.hubKeluarga === 'Anak' && b.hubKeluarga === 'Anak') return b.age - a.age;
+                        return 0;
+                    });
+
+                    if (typeof populateDatalists === 'function') populateDatalists(globalData);
+                    if (typeof updateFilterCounts === 'function') updateFilterCounts();
+                    applyFilters();
+                } catch (e) {
+                    console.error("loadData error:", e);
+                    Swal.fire('Error Client', 'Gagal memproses data: ' + e.message, 'error');
+                } finally {
+                    showLoading(false);
+                }
             }).withFailureHandler(function (err) {
                 showLoading(false);
-                Swal.fire('Error', 'Gagal memuat data: ' + err.message, 'error');
+                Swal.fire('Error Server', 'Gagal memuat data: ' + err.message, 'error');
             }).getData();
         }
 
@@ -1137,11 +1213,24 @@
                     return dayA - dayB;
                 });
 
+                // Save for copying
+                window.currentBdays = bdays;
+
                 var list = document.getElementById('birthdayList');
                 if (!list) return;
                 list.innerHTML = '';
+
+                // Add Copy Button if data exists
+                var copyBtnHtml = '';
+                if (bdays.length > 0) {
+                    copyBtnHtml = '<div class="d-flex justify-content-end mb-2">' +
+                        '<button class="btn btn-outline-primary btn-sm rounded-pill" onclick="copyBirthdayList()">' +
+                        '<i class="bi bi-clipboard me-1"></i>Salin Daftar Teks</button></div>';
+                }
+                list.innerHTML = copyBtnHtml;
+
                 if (bdays.length === 0) {
-                    list.innerHTML = '<div class="text-center py-4 text-muted"><p>Tidak ada yang berulang tahun di bulan ini.</p></div>';
+                    list.innerHTML += '<div class="text-center py-4 text-muted"><p>Tidak ada yang berulang tahun di bulan ini.</p></div>';
                 } else {
                     bdays.forEach(function (m) {
                         var isSuper = currentUser && currentUser.role === 'SUPER_ADMIN';
@@ -1193,6 +1282,42 @@
             return "Selamat ulang tahun untuk " + pref + " terkasih yang berulang tahun pada " + bDay + "! Kiranya Tuhan selalu menjaga dan memberkati.";
         }
 
+        function copyBirthdayList() {
+            try {
+                var bdays = window.currentBdays || [];
+                if (bdays.length === 0) return Swal.fire('Info', 'Tidak ada data untuk disalin', 'info');
+
+                var today = new Date();
+                var monthName = getMonthName(today.getMonth() + 1);
+                var year = today.getFullYear();
+
+                var text = "🎂 *Ulang Tahun Bulan " + monthName + " " + year + "* 🎂\n\n";
+
+                bdays.forEach(function (m, i) {
+                    var dateParts = m.tanggalLahir.split('-');
+                    var day = parseInt(dateParts[2], 10);
+                    // Format: 1. Nama - Tgl (Umur Thn) - Wilayah
+                    text += (i + 1) + ". " + m.nama + " - " + day + " " + monthName + " (" + m.age + " Thn) - " + m.wilayah + "\n";
+                });
+
+                text += "\nKiranya Tuhan memberkati.";
+
+                navigator.clipboard.writeText(text).then(function () {
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Daftar berhasil disalin!', timer: 1500, showConfirmButton: false });
+                }).catch(function (err) {
+                    // Fallback for older browsers / non-secure contexts
+                    var ta = document.createElement("textarea");
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(ta);
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Daftar berhasil disalin!', timer: 1500, showConfirmButton: false });
+                });
+
+            } catch (e) { console.error("copyBirthdayList error:", e); }
+        }
+
         function sendBdayWA(p, m) { if (p) window.open('https://wa.me/' + p + '?text=' + encodeURIComponent(m), '_blank'); else alert("No HP Kosong"); }
         function calculateAge(d) { if (!d) return 0; var b = new Date(d), t = new Date(); if (isNaN(b)) return 0; var a = t.getFullYear() - b.getFullYear(); if (t.getMonth() < b.getMonth() || (t.getMonth() == b.getMonth() && t.getDate() < b.getDate())) a--; return a > 0 ? a : 0; }
         function normalizeJK(v) { if (!v) return ""; v = v.toString().toLowerCase(); return (v.startsWith("l") || v.includes("laki")) ? "L" : "P"; }
@@ -1239,7 +1364,7 @@
                 if (!searchInput) return;
                 var term = searchInput.value.toLowerCase();
 
-                // Advanced filters from drawer
+                // Advanced filters
                 var fPendidikan = document.getElementById('filterPendidikan').value;
                 var fPekerjaan = document.getElementById('filterPekerjaan').value;
                 var fJK = document.getElementById('filterJK').value;
@@ -1247,7 +1372,7 @@
                 var fStatusBergereja = document.getElementById('filterStatusBergereja').value;
                 var fGolDarah = document.getElementById('filterGolDarah').value;
 
-                // Age range from slider
+                // Age range
                 var ageMin = 0, ageMax = 100;
                 if (slider && slider.noUiSlider) {
                     var vals = slider.noUiSlider.get();
@@ -1255,10 +1380,19 @@
                     ageMax = parseInt(vals[1], 10);
                 }
 
+                // Initialize dynamic counts
+                var counts = {
+                    wil: { 'Barat': 0, 'Timur': 0, 'Tengah': 0, 'Tandon': 0, 'Gegeran': 0, 'Gemantar': 0, 'All': 0 },
+                    kat: { 'Anak': 0, 'Remaja': 0, 'Pemuda': 0, 'Dewasa': 0, 'Lansia': 0, 'Meninggal': 0, 'All': 0 }
+                };
+
+                var isViewMeninggal = (activePills.Kat === 'Meninggal');
+
                 filteredData = globalData.filter(function (r) {
+                    var isDeceased = (r.tanggalKematian && r.tanggalKematian.length > 5); // Simple check
+
+                    // 1. Base Match (Search + Advanced + Age)
                     var matchText = (term === "" || (r.nama + " " + r.nik + " " + r.noKK).toLowerCase().includes(term));
-                    var matchWil = activePills.Wilayah === "" || r.wilayah === activePills.Wilayah;
-                    var matchKat = activePills.Kat === "" || (r.kategorial || "").toLowerCase().includes(activePills.Kat.toLowerCase());
                     var matchAge = (r.age >= ageMin && r.age <= ageMax);
 
                     var matchPend = (fPendidikan === "" || r.pendidikan === fPendidikan);
@@ -1268,8 +1402,74 @@
                     var matchSB = (fStatusBergereja === "" || r.statusBergereja === fStatusBergereja);
                     var matchGol = (fGolDarah === "" || r.golDarah === fGolDarah);
 
-                    return matchText && matchWil && matchKat && matchAge && matchPend && matchPek && matchJK && matchSK && matchSB && matchGol;
+                    var baseMatch = matchText && matchAge && matchPend && matchPek && matchJK && matchSK && matchSB && matchGol;
+                    if (!baseMatch) return false;
+
+                    // 2. Facet Logic & Deceased Filter
+
+                    var matchWil = activePills.Wilayah === "" || r.wilayah === activePills.Wilayah;
+                    // For Kat match:
+                    var matchKat = false;
+                    if (isViewMeninggal) {
+                        matchKat = isDeceased;
+                    } else {
+                        // Standard mode: Must NOT be deceased AND match text category
+                        matchKat = !isDeceased && (activePills.Kat === "" || (r.kategorial || "").toLowerCase().includes(activePills.Kat.toLowerCase()));
+                    }
+
+                    // == Dynamic Counting ==
+
+                    // A. Wilayah Counts
+                    // Context: If I am currently viewing 'Meninggal', Wilayah counts should reflect deceased.
+                    // If viewing 'Living' (default), Wilayah counts should reflect living (filtered by category).
+
+                    var fitsKatContext = false;
+                    if (isViewMeninggal) {
+                        fitsKatContext = isDeceased;
+                    } else {
+                        fitsKatContext = !isDeceased && (activePills.Kat === "" || (r.kategorial || "").toLowerCase().includes(activePills.Kat.toLowerCase()));
+                    }
+
+                    if (fitsKatContext) {
+                        counts.wil['All']++;
+                        if (counts.wil[r.wilayah] !== undefined) counts.wil[r.wilayah]++;
+                    }
+
+                    // B. Kategorial Counts
+                    // We always want to know:
+                    // - Living members per category (in current Wilayah)
+                    // - Deceased members (in current Wilayah)
+
+                    if (matchWil) {
+                        if (isDeceased) {
+                            counts.kat['Meninggal']++;
+                        } else {
+                            // Living
+                            counts.kat['All']++;
+                            if (r.kategorial && counts.kat[r.kategorial] !== undefined) counts.kat[r.kategorial]++;
+                        }
+                    }
+
+                    // 3. Final Filter Return
+                    return matchWil && matchKat;
                 });
+
+                // Update Badge UI
+                var allWil = document.getElementById('count-wil-all');
+                if (allWil) allWil.innerText = counts.wil['All'];
+                for (var w in counts.wil) {
+                    if (w === 'All') continue;
+                    var el = document.getElementById('count-wil-' + w.toLowerCase());
+                    if (el) el.innerText = counts.wil[w];
+                }
+
+                var allKat = document.getElementById('count-kat-all');
+                if (allKat) allKat.innerText = counts.kat['All'];
+                for (var k in counts.kat) {
+                    if (k === 'All') continue;
+                    var el = document.getElementById('count-kat-' + k.toLowerCase());
+                    if (el) el.innerText = counts.kat[k];
+                }
 
                 renderTable(filteredData);
                 var fc = document.getElementById('filterCount'); if (fc) fc.innerText = filteredData.length + " Data";
@@ -1294,6 +1494,12 @@
             // Update Header
             var header = document.getElementById('tableActionHeader');
             if (header) header.innerText = isGuest ? 'Pekerjaan' : 'Aksi';
+
+            // Toggle Headers for Guest
+            var thNoKK = document.getElementById('thNoKK');
+            var thHub = document.getElementById('thHubungan');
+            if (thNoKK) thNoKK.style.display = isGuest ? 'none' : '';
+            if (thHub) thHub.style.display = isGuest ? 'none' : '';
 
             if (tbody) tbody.innerHTML = ''; if (grid) grid.innerHTML = '';
             var empty = document.getElementById('emptyState');
@@ -1363,7 +1569,38 @@
         }
         function showDetails(index) {
             var r = filteredData[index];
-            if (!r) return;
+            if (r) showDetailsByData(r);
+        }
+
+        function showDetailsById(id) {
+            var r = globalData.find(function (d) { return d.id === id; });
+            if (r) showDetailsByData(r);
+        }
+
+        function editDataByRecord(r) {
+            // Find index in filteredData if possible, otherwise just use the record directly
+            // Actually, existing edit logic might rely on index for saving? 
+            // Let's assume editDataByIndex needs refactoring or we use a workaround.
+            // If we don't have index, we can just open modal with data. 
+            // BUT handleFormSubmit usually needs to know if it's Edit mode.
+            // Let's rely on filling the form with ID.
+
+            // Check if we can find it in filteredData to keep consistency
+            var idx = filteredData.findIndex(function (d) { return d.id === r.id; });
+            if (idx >= 0) {
+                editDataByIndex(idx);
+            } else {
+                // Not in filtered list, but we can still edit.
+                // We need to polyfill what editDataByIndex does.
+                // Let's assign a temporary index or just fill the form.
+                fillFormWithData(r); // We need to verify if this function exists or logic is inline.
+                // Looking at previous code, editDataByIndex likely calls openModal with data.
+                // Let's check openModal.
+                openModal(r);
+            }
+        }
+
+        function showDetailsByData(r) {
             var isGuest = (currentUser && currentUser.role === 'MEMBER');
             var dn = document.getElementById('detailNama'); if (dn) dn.innerText = r.nama;
             var dc = document.getElementById('detailContent');
@@ -1371,7 +1608,6 @@
                 var html = '<div class="row g-3">';
                 var fields = [];
 
-                // Add No KK and Hubungan only for non-guests
                 if (!isGuest) {
                     fields.push({ l: 'No KK', v: r.noKK });
                     fields.push({ l: 'Hubungan', v: r.hubKeluarga });
@@ -1382,7 +1618,6 @@
                 fields.push({ l: 'Pendidikan', v: r.pendidikan });
                 fields.push({ l: 'Wilayah', v: r.wilayah });
 
-                // Add family member names only for non-guests
                 if (!isGuest) {
                     if (r.hubKeluarga === 'Kepala Keluarga') {
                         fields.push({ l: 'Nama Istri', v: r.namaIstri });
@@ -1407,7 +1642,6 @@
                     { l: 'Catatan', v: r.catatan }
                 ];
 
-                // Add Tanggal Lahir and Alamat only for non-guests
                 if (!isGuest) {
                     moreFields.splice(2, 0, { l: 'Tgl Lahir', v: r.tanggalLahir });
                     moreFields.splice(6, 0, { l: 'Alamat', v: r.alamat });
@@ -1433,7 +1667,7 @@
                     btnEdit.onclick = function () {
                         var modalInstance = bootstrap.Modal.getInstance(dModalEl);
                         if (modalInstance) modalInstance.hide();
-                        editDataByIndex(index);
+                        editDataByRecord(r);
                     };
                 } else {
                     footer.classList.add('d-none');
@@ -1457,7 +1691,13 @@
                 var jkI = normalizeJK(m.jk) === 'L' ? '♂' : '♀';
                 var isGuest = (currentUser && currentUser.role === 'MEMBER');
                 var nikDisplay = isGuest ? '******' : (m.nik || '-');
-                return '<div class="list-group-item d-flex justify-content-between align-items-center mb-1 border-0 shadow-sm rounded-3"><div><h6 class="mb-0 fw-bold">' + roleIcon + m.nama + ' ' + jkI + '</h6><small class="text-muted">' + m.hubKeluarga + ' | NIK: ' + nikDisplay + '</small></div><span class="badge bg-light text-dark border">' + m.age + ' Thn</span></div>';
+
+                var nameDisplay = m.nama;
+                if (!isGuest && currentUser && currentUser.role === 'SUPER_ADMIN') {
+                    nameDisplay = '<span class="text-primary fw-bold" style="cursor:pointer; text-decoration: underline;" onclick="showDetailsById(\'' + m.id + '\')" title="Klik untuk edit detail">' + m.nama + '</span>';
+                }
+
+                return '<div class="list-group-item d-flex justify-content-between align-items-center mb-1 border-0 shadow-sm rounded-3"><div><h6 class="mb-0 fw-bold">' + roleIcon + nameDisplay + ' ' + jkI + '</h6><small class="text-muted">' + m.hubKeluarga + ' | NIK: ' + nikDisplay + '</small></div><span class="badge bg-light text-dark border">' + m.age + ' Thn</span></div>';
             }).join('') + '</div>';
             if (!fModal) fModal = new bootstrap.Modal(document.getElementById('familyModal'));
             fModal.show();
@@ -1546,7 +1786,134 @@
             } catch (e) { console.error("toggleSpouseFields error:", e); }
         }
 
-        function checkSmartLink(el, type) { /* Placeholder for smart linking logic */ }
+        function handleSearchInput() {
+            var v = document.getElementById('searchInput').value;
+            var btn = document.getElementById('clearSearchBtn');
+            if (btn) btn.style.display = v ? 'block' : 'none';
+            applyFilters();
+        }
+
+        function clearSearch() {
+            var inp = document.getElementById('searchInput');
+            if (inp) {
+                inp.value = '';
+                handleSearchInput();
+            }
+        }
+
+
+
+        function searchKK() {
+            Swal.fire({
+                title: 'Cari No KK',
+                text: 'Masukkan nama kepala keluarga atau anggota keluarga:',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonText: 'Cari',
+                showLoaderOnConfirm: true,
+                preConfirm: (term) => {
+                    if (!term) return Swal.showValidationMessage('Nama tidak boleh kosong');
+
+                    var hits = globalData.filter(function (d) {
+                        return d.nama.toLowerCase().includes(term.toLowerCase());
+                    });
+
+                    if (hits.length === 0) {
+                        return Swal.showValidationMessage('Data tidak ditemukan');
+                    }
+                    return hits;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var hits = result.value;
+                    if (hits.length === 1) {
+                        // Direct fill if only 1 match
+                        fillKK(hits[0]);
+                    } else {
+                        // Pick from list
+                        var html = '<div class="list-group text-start" style="max-height:300px;overflow-y:auto;">';
+                        hits.forEach(function (h, idx) {
+                            html += '<button type="button" class="list-group-item list-group-item-action" onclick="window.selectKK(' + idx + ')">' +
+                                '<div class="fw-bold">' + h.nama + '</div>' +
+                                '<small class="text-muted">' + (h.hubKeluarga || '-') + ' | KK: ' + h.noKK + ' | ' + h.wilayah + '</small>' +
+                                '</button>';
+                        });
+                        html += '</div>';
+
+                        // Store hits temporarily
+                        window.tempHits = hits;
+                        window.selectKK = function (i) {
+                            fillKK(window.tempHits[i]);
+                            Swal.close();
+                        };
+
+                        Swal.fire({
+                            title: 'Pilih Data',
+                            html: html,
+                            showConfirmButton: false,
+                            showCancelButton: true
+                        });
+                    }
+                }
+            });
+        }
+
+        function fillKK(data) {
+            var kkEl = document.getElementById('noKK');
+            if (kkEl) {
+                kkEl.value = data.noKK;
+                kkEl.style.transition = "background-color 0.5s";
+                kkEl.style.backgroundColor = "#fff3cd";
+                setTimeout(function () { kkEl.style.backgroundColor = ""; }, 1000);
+            }
+            // Also autofill Wilayah if empty
+            var wilEl = document.getElementById('wilayah');
+            if (wilEl && (!wilEl.value || wilEl.value === '-')) {
+                wilEl.value = data.wilayah;
+            }
+        }
+
+        function checkSmartLink(el, type) {
+            var val = el.value;
+            if (!val || val.length < 3) return;
+
+            // Find matches
+            var hits = globalData.filter(function (d) { return d.nama.toLowerCase().includes(val.toLowerCase()); });
+
+            if (hits.length === 0) return;
+
+            // Priority: Exact match
+            var exact = hits.find(function (d) { return d.nama.toLowerCase() === val.toLowerCase(); });
+            var target = exact || hits[0]; // Default to first hit if no exact match
+
+            if (target && target.noKK) {
+                promptCopyKK(target, type, hits.length > 1);
+            }
+        }
+
+        function promptCopyKK(found, type, multiple) {
+            var currentKK = document.getElementById('noKK').value;
+            if (currentKK === found.noKK) return; // Already same
+
+            var msg = 'Ditemukan data ' + type + ' atas nama "<b>' + found.nama + '</b>".';
+            if (multiple) msg += '<br><small class="text-muted">(Ditemukan kemiripan nama lain, tapi ini yang paling cocok)</small>';
+            msg += '<br><br>Apakah ingin menyamakan No KK (<b>' + found.noKK + '</b>)?';
+
+            Swal.fire({
+                title: 'Data Ditemukan',
+                html: msg,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Samakan No KK',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fillKK(found);
+                }
+            });
+        }
 
         window.onscroll = function () {
             var btt = document.getElementById("backToTop");
