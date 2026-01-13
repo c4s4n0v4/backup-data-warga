@@ -1,0 +1,1566 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Data Warga GKJ Wonogiri Utara</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #eff3f8;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            --border-radius: 16px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: sans-serif;
+            color: #444;
+            padding-bottom: 80px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand {
+            color: #333 !important;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            background: white;
+            transition: transform 0.2s;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            box-shadow: 0 4px 10px rgba(118, 75, 162, 0.3);
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 15px rgba(118, 75, 162, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-light {
+            color: #666;
+            border-color: #ddd;
+        }
+
+        .btn-outline-light:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* Form Controls */
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid #e1e5ea;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+            border-color: #764ba2;
+        }
+
+        /* Slider */
+        #ageSlider {
+            height: 6px;
+            border: none;
+            background: #dee2e6;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .noUi-connect {
+            background: var(--primary-gradient);
+        }
+
+        .noUi-handle {
+            width: 20px !important;
+            height: 20px !important;
+            border-radius: 4px !important;
+            border: none !important;
+            background: #764ba2 !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+            right: -10px !important;
+            top: -8px !important;
+            cursor: move;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .noUi-handle:hover {
+            transform: scale(1.1);
+            background: #667eea !important;
+        }
+
+        .noUi-handle:active {
+            transform: scale(0.95);
+        }
+
+        .noUi-handle:before,
+        .noUi-handle:after {
+            display: none;
+        }
+
+        .noUi-target {
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* Quick Filters & Pills */
+        .quick-filter-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 5px 0 15px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .quick-filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pill-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+
+
+        .pill-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            white-space: nowrap;
+            margin-right: 5px;
+        }
+
+        .pill-btn {
+            white-space: nowrap;
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid #dee2e6;
+            background: white;
+            font-size: 0.85rem;
+            color: #555;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .pill-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .pill-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 8px rgba(118, 75, 162, 0.2);
+        }
+
+        .filter-badge-btn {
+            position: relative;
+        }
+
+        .filter-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: #ff4757;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: none;
+        }
+
+        /* Badge */
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.8em;
+            border-radius: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Table Desktop Style */
+        .table-custom {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            width: 100%;
+        }
+
+        .table-custom thead th {
+            position: sticky;
+            top: 52px;
+            /* Adjusted for slim navbar */
+            background-color: var(--bg-color);
+            z-index: 100;
+            border: none;
+            color: #888;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 15px;
+        }
+
+        .table-custom tbody tr {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+            border-radius: 12px;
+        }
+
+        /* Grid View Card Styles */
+        .member-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .member-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .member-card .role-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .member-card .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+
+        .member-card .info-label {
+            color: #888;
+        }
+
+        .member-card .info-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .member-card .name-box {
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            padding-right: 60px;
+        }
+
+        /* Privacy Toggles */
+        body:not(.is-super) .super-only {
+            display: none !important;
+        }
+
+        .table-custom tbody tr td:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .table-custom tbody tr td:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .table-custom td {
+            padding: 20px 15px;
+            border: none;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        .table-custom tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* LOGIN PAGE */
+        #loginPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 5000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* Start from top to allow scrolling */
+            overflow-y: auto;
+            /* Enable vertical scroll */
+            padding: 20px 0;
+        }
+
+        .login-card {
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            /* Center card in the flex container */
+        }
+
+        /* MOBILE RESPONSIVE ACCORDION VIEW */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            .main-container {
+                padding: 10px;
+                margin-top: 10px;
+            }
+
+            .table-custom thead {
+                display: none;
+            }
+
+            .table-custom tbody,
+            .table-custom tr,
+            .table-custom td {
+                display: block;
+                width: 100%;
+            }
+
+            .table-custom tbody tr {
+                margin-bottom: 12px;
+                position: relative;
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                background: white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            .table-custom tbody tr td {
+                display: none;
+            }
+
+            .table-custom tbody tr td.name-cell-mobile {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 20px;
+                background: white;
+            }
+
+            .table-custom tbody tr.expanded td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+                border-top: 1px solid #f7f7f7;
+                background: #fafafa;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .table-custom tbody tr.expanded td.name-cell-mobile {
+                background: white;
+                border-bottom: 2px solid var(--primary-color);
+                color: var(--primary-color);
+            }
+
+            .table-custom tbody tr td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #999;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                margin-right: 10px;
+            }
+
+            .table-custom tbody tr td.name-cell-mobile::before {
+                display: none;
+            }
+
+            .mobile-chevron {
+                transition: transform 0.3s;
+            }
+
+            .table-custom tbody tr.expanded .mobile-chevron {
+                transform: rotate(180deg);
+            }
+
+            .table-custom tbody tr.expanded td:last-child {
+                justify-content: flex-end;
+                gap: 10px;
+                background: #fff;
+                padding: 15px;
+                border-top: 1px solid #eee;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading" class="loading-overlay">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+    </div>
+
+    <div id="loginPage">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <img src="https://docs.google.com/drawings/d/1xhf-3jQrTJB5iIbU02j_Gp3mAcFpAizn1bkEjnP01TI/export/png"
+                    alt="Logo GKJ" style="width: min(160px, 40vw); height: auto; object-fit: contain;" class="mb-3"
+                    onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/4/41/Logo_Gereja_Kristen_Jawa.jpg';">
+                <h4 class="fw-bold mt-2">Selamat Datang</h4>
+                <p class="text-muted small">Data Warga GKJ Wonogiri Utara</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-floating mb-3"><input type="text" class="form-control" id="uName"
+                        placeholder="Username"><label>Username</label></div>
+                <div class="form-floating mb-3"><input type="password" class="form-control" id="uPass"
+                        placeholder="Password"><label>Password</label></div>
+                <div class="form-check mb-4 text-start"><input class="form-check-input" type="checkbox" id="showPass"
+                        onclick="togglePassword()"><label class="form-check-label small text-muted">Tampilkan
+                        Password</label></div>
+                <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Masuk sebagai Admin</button>
+            </form>
+            <div class="text-center"><span class="text-muted small">atau</span></div>
+            <button onclick="loginGuest()" class="btn btn-outline-secondary w-100 py-2 mt-3">Masuk sebagai
+                Tamu/Anggota</button>
+        </div>
+    </div>
+
+    <button id="backToTop" onclick="scrollToTop()" title="Kembali ke Atas">
+        <i class="bi bi-arrow-up-short fs-2"></i>
+    </button>
+
+    <div id="appContent" style="display:none;">
+        <nav class="navbar fixed-top navbar-expand-lg py-1">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <div style="min-width: 35px; height: 20px; position: relative;" class="me-2">
+                        <img src="https://docs.google.com/drawings/d/1xhf-3jQrTJB5iIbU02j_Gp3mAcFpAizn1bkEjnP01TI/export/png"
+                            alt="Logo"
+                            style="width: 35px; height: 35px; object-fit: contain; position: absolute; top: 50%; left: 0; transform: translateY(-50%);"
+                            onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/4/41/Logo_Gereja_Kristen_Jawa.jpg';">
+                    </div>
+                    <span style="font-size: 0.9rem; line-height: 1.1;">GKJ Wonogiri Utara</span>
+                </a>
+                <div class="d-flex align-items-center flex-grow-1 mx-2 mx-md-4" style="max-width: 400px;">
+                    <div class="input-group input-group-sm shadow-sm"
+                        style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="input-group-text bg-white border-0 ps-2" style="padding-right: 0;">
+                            <i class="bi bi-search text-muted small"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 bg-white" id="searchInput" placeholder="Cari..."
+                            onkeyup="handleSearchInput()" style="font-size: 0.85rem; padding-left: 5px;">
+                        <button class="btn btn-white border-0 px-2" type="button" onclick="clearSearch()"
+                            style="background: white; display: none;" id="clearSearchBtn" title="Hapus Pencarian">
+                            <i class="bi bi-x-lg text-muted small"></i>
+                        </button>
+                        <button class="btn btn-white border-0 border-start px-2 filter-badge-btn" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" style="background: white;">
+                            <i class="bi bi-sliders2 text-primary small"></i>
+                            <span class="filter-dot" id="filterActiveDot" style="width: 7px; height: 7px;"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-1 align-items-center">
+                    <span id="userBadge" class="badge bg-light text-dark border d-none d-sm-inline-block"></span>
+                    <button class="btn btn-primary btn-sm rounded-pill px-2" onclick="openModal('add')" id="btnAdd"
+                        title="Tambah Data">
+                        <i class="bi bi-plus-lg"></i><span class="d-none d-md-inline ms-1">Baru</span>
+                    </button>
+                    <button class="btn btn-outline-light btn-sm rounded-pill border px-2" onclick="loadData()"
+                        title="Refresh">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <div class="btn-group btn-group-sm rounded-pill overflow-hidden border d-none d-sm-flex"
+                        role="group">
+                        <input type="radio" class="btn-check" name="viewMode" id="viewModeList" checked
+                            onchange="applyFilters()">
+                        <label class="btn btn-outline-secondary border-0 px-2" for="viewModeList" title="List View"><i
+                                class="bi bi-list-task"></i></label>
+                        <input type="radio" class="btn-check" name="viewMode" id="viewModeGrid"
+                            onchange="applyFilters()">
+                        <label class="btn btn-outline-secondary border-0 px-2" for="viewModeGrid" title="Grid View"><i
+                                class="bi bi-grid-3x3-gap-fill"></i></label>
+                    </div>
+                    <button class="btn btn-warning btn-sm rounded-pill border px-2" onclick="showBirthdayGreetings()"
+                        title="Ulang Tahun">
+                        <i class="bi bi-cake2-fill"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm rounded-pill px-2" onclick="doLogout()" title="Keluar">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div style="height: 80px;"></div>
+        <div class="container main-container">
+            <div class="quick-filter-scroll mb-3 mt-2">
+                <div class="pill-group">
+                    <span class="pill-label">Wilayah:</span>
+                    <button class="pill-btn active" onclick="setPill('Wilayah', '')" data-pill-wilayah="">Semua</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Barat')"
+                        data-pill-wilayah="Barat">Barat</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Timur')"
+                        data-pill-wilayah="Timur">Timur</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tengah')"
+                        data-pill-wilayah="Tengah">Tengah</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Tandon')"
+                        data-pill-wilayah="Tandon">Tandon</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Gegeran')"
+                        data-pill-wilayah="Gegeran">Gegeran</button>
+                    <button class="pill-btn" onclick="setPill('Wilayah', 'Gemantar')"
+                        data-pill-wilayah="Gemantar">Gemantar</button>
+                </div>
+                <div class="vr mx-2 text-muted opacity-25"></div>
+                <div class="pill-group">
+                    <span class="pill-label">Kategorial:</span>
+                    <button class="pill-btn active" onclick="setPill('Kat', '')" data-pill-kat="">Semua</button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Anak')" data-pill-kat="Anak">Anak</button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Remaja')" data-pill-kat="Remaja">Remaja</button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Pemuda')" data-pill-kat="Pemuda">Pemuda</button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Dewasa')" data-pill-kat="Dewasa">Dewasa</button>
+                    <button class="pill-btn" onclick="setPill('Kat', 'Lansia')" data-pill-kat="Lansia">Lansia</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 px-1">
+            <span class="text-muted small fw-bold text-uppercase" id="filterCount">0 Data Ditemukan</span>
+        </div>
+
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th width="50" class="super-only">ID</th>
+                    <th>No KK</th>
+                    <th>Nama & NIK</th>
+                    <th>Hubungan</th>
+                    <th width="40">JK</th>
+                    <th>Umur</th>
+                    <th>Pendidikan</th>
+                    <th>Wilayah</th>
+                    <th>Gol. Drh</th>
+                    <th>Catatan</th>
+                    <th class="text-end" id="tableActionHeader">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <div id="gridView" class="row g-3 d-none"></div>
+
+        <div id="emptyState" class="text-center py-5 d-none"><i class="bi bi-inbox fs-1 text-muted opacity-50"></i>
+            <p class="text-muted mt-3">Tidak ada data.</p>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="formModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary ms-2 mt-2">Form Data Warga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="wargaForm" onsubmit="handleFormSubmit(event)">
+                        <input type="hidden" id="dataId" name="id">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="noKK"
+                                        placeholder="No KK"><label>No. Kartu Keluarga (KK)</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="hubKeluarga"
+                                        onchange="toggleSpouseFields()">
+                                        <option value="">-</option>
+                                        <option value="Kepala Keluarga">Kepala Keluarga</option>
+                                        <option value="Istri">Istri</option>
+                                        <option value="Anak">Anak</option>
+                                        <option value="Orang Tua">Orang Tua</option>
+                                        <option value="Famili Lain">Famili Lain</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select><label>Hubungan Keluarga</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="number" class="form-control" id="nik"
+                                        placeholder="NIK" required><label>NIK</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="nama"
+                                        placeholder="Nama" required><label>Nama Lengkap</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="jk"
+                                        onchange="toggleSpouseFields()" required>
+                                        <option value="Laki laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select><label>Jenis Kelamin</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="golDarah">
+                                        <option value="">-</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="AB">AB</option>
+                                        <option value="O">O</option>
+                                    </select><label>Golongan Darah</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="date" class="form-control" id="tanggalLahir"
+                                        required><label>Tanggal Lahir</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="tempatLahir"
+                                        placeholder="Tempat"><label>Tempat Lahir</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="namaSuami"
+                                        list="listSuami" placeholder="Nama Suami"
+                                        onchange="checkSmartLink(this, 'Suami')"><label>Nama Suami</label></div>
+                                <div id="feedbackSuami" class="form-text mt-0"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="namaIstri"
+                                        list="listIstri" placeholder="Nama Istri"
+                                        onchange="checkSmartLink(this, 'Istri')"><label>Nama Istri</label></div>
+                                <div id="feedbackIstri" class="form-text mt-0"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="namaAyah"
+                                        list="listAyah" placeholder="Nama Ayah"
+                                        onchange="checkSmartLink(this, 'Ayah')"><label>Nama Ayah</label></div>
+                                <div id="feedbackAyah" class="form-text mt-0"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="namaIbu"
+                                        list="listIbu" placeholder="Nama Ibu"
+                                        onchange="checkSmartLink(this, 'Ibu')"><label>Nama Ibu</label></div>
+                                <div id="feedbackIbu" class="form-text mt-0"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="pendidikan">
+                                        <option value="">-</option>
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA">SMA</option>
+                                        <option value="SMK">SMK</option>
+                                        <option value="DIPLOMA">DIPLOMA</option>
+                                        <option value="S1">S1</option>
+                                        <option value="S2">S2</option>
+                                        <option value="S3">S3</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select><label>Pendidikan Terakhir</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="kategorial">
+                                        <option value="">-</option>
+                                        <option value="Anak">Anak</option>
+                                        <option value="Remaja">Remaja</option>
+                                        <option value="Pemuda">Pemuda</option>
+                                        <option value="Dewasa">Dewasa</option>
+                                        <option value="Lansia">Lansia</option>
+                                    </select><label>Kategorial</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="pekerjaan">
+                                        <option value="">-</option>
+                                        <option value="Swasta">Swasta</option>
+                                        <option value="PNS">PNS</option>
+                                        <option value="TNI/Polri">TNI/Polri</option>
+                                        <option value="Petani">Petani</option>
+                                        <option value="UMKM">UMKM</option>
+                                        <option value="Pengusaha">Pengusaha</option>
+                                        <option value="Dokter">Dokter</option>
+                                        <option value="Perawat">Perawat</option>
+                                        <option value="Bidan">Bidan</option>
+                                        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select><label>Pekerjaan</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="wilayah" required>
+                                        <option value="Barat">Barat</option>
+                                        <option value="Timur">Timur</option>
+                                        <option value="Tengah">Tengah</option>
+                                        <option value="Tandon">Tandon</option>
+                                        <option value="Gegeran">Gegeran</option>
+                                        <option value="Gemantar">Gemantar</option>
+                                    </select><label>Wilayah</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="statusKeluarga">
+                                        <option value="">-</option>
+                                        <option value="Keluarga Lengkap">Keluarga Lengkap</option>
+                                        <option value="Keluarga Tunggal">Keluarga Tunggal</option>
+                                    </select><label>Status Keluarga</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><select class="form-select" id="statusBergereja">
+                                        <option value="Warga Tetap">Warga Tetap</option>
+                                        <option value="Simpatisan">Simpatisan</option>
+                                        <option value="Tamu">Tamu</option>
+                                    </select><label>Status Bergereja</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="text" class="form-control" id="noHp"
+                                        placeholder="No HP"><label>No. Handphone</label></div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating"><input type="text" class="form-control" id="alamat"
+                                        placeholder="Alamat"><label>Alamat Lengkap</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="date" class="form-control"
+                                        id="tanggalBaptis"><label>Tanggal Baptis</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating"><input type="date" class="form-control border-danger"
+                                        id="tanggalKematian"><label class="text-danger">Tanggal Kematian</label></div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating"><textarea class="form-control" id="catatan"
+                                        placeholder="Catatan" style="height: 100px"></textarea><label>Catatan
+                                        Tambahan</label></div>
+                            </div>
+                            <datalist id="listAyah"></datalist><datalist id="listIbu"></datalist><datalist
+                                id="listSuami"></datalist><datalist id="listIstri"></datalist>
+                        </div>
+                        <div class="mt-4 d-flex justify-content-end gap-2 border-top pt-3">
+                            <button type="button" class="btn btn-light rounded-pill px-4"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Simpan
+                                Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary ms-2 mt-2" id="detailNama">Detail Warga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="detailContent">
+                    <!-- Dynamic Content -->
+                </div>
+                <div class="modal-footer border-0 p-3 pt-0 d-none" id="detailFooter">
+                    <button type="button" class="btn btn-outline-primary rounded-pill px-4" id="btnEditFromDetail">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Data
+                    </button>
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="birthdayModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary ms-2 mt-2">🎂 Ulang Tahun Hari Ini</h5><button
+                        type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="birthdayList" class="list-group list-group-flush"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="familyModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary ms-2 mt-1"><i
+                            class="bi bi-people-fill me-2"></i>Hubungan Keluarga</h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="familyListContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterDrawer"
+        style="border-top-left-radius: 25px; border-bottom-left-radius: 25px;">
+        <div class="offcanvas-header border-bottom p-4">
+            <h5 class="offcanvas-title fw-bold">Filter Lanjutan</h5><button type="button" class="btn-close"
+                data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <div class="mb-4"><label class="form-label fw-bold small text-muted text-uppercase">Rentang Umur: <span
+                        id="ageLabel" class="text-primary">0 - 100 Thn</span></label>
+                <div id="ageSlider" class="mx-2"></div>
+            </div>
+            <div class="row g-3">
+                <div class="col-6"><label class="form-label fw-bold small text-muted text-uppercase">Jenis
+                        Kelamin</label><select class="form-select" id="filterJK" onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select></div>
+                <div class="col-6"><label class="form-label fw-bold small text-muted text-uppercase">Gol.
+                        Darah</label><select class="form-select" id="filterGolDarah" onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="AB">AB</option>
+                        <option value="O">O</option>
+                    </select></div>
+                <div class="col-12"><label class="form-label fw-bold small text-muted text-uppercase">Status
+                        Keluarga</label><select class="form-select" id="filterStatusKeluarga" onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="Keluarga Lengkap">Keluarga Lengkap</option>
+                        <option value="Keluarga Tunggal">Keluarga Tunggal</option>
+                    </select></div>
+                <div class="col-12"><label class="form-label fw-bold small text-muted text-uppercase">Status
+                        Bergereja</label><select class="form-select" id="filterStatusBergereja"
+                        onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="Warga Tetap">Warga Tetap</option>
+                        <option value="Simpatisan">Simpatisan</option>
+                        <option value="Tamu">Tamu</option>
+                    </select></div>
+                <div class="col-12"><label
+                        class="form-label fw-bold small text-muted text-uppercase">Pendidikan</label><select
+                        class="form-select" id="filterPendidikan" onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="SD">SD</option>
+                        <option value="SMP">SMP</option>
+                        <option value="SMA">SMA</option>
+                        <option value="SMK">SMK</option>
+                        <option value="DIPLOMA">DIPLOMA</option>
+                        <option value="S1">S1</option>
+                        <option value="S2">S2</option>
+                        <option value="S3">S3</option>
+                    </select></div>
+                <div class="col-12"><label
+                        class="form-label fw-bold small text-muted text-uppercase">Pekerjaan</label><select
+                        class="form-select" id="filterPekerjaan" onchange="applyFilters()">
+                        <option value="">Semua</option>
+                        <option value="PNS">PNS</option>
+                        <option value="Swasta">Swasta</option>
+                        <option value="TNI/Polri">TNI/Polri</option>
+                        <option value="Petani">Petani</option>
+                        <option value="UMKM">UMKM</option>
+                        <option value="Pengusaha">Pengusaha</option>
+                        <option value="Pendeta">Pendeta</option>
+                        <option value="Guru">Guru</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Dokter">Dokter</option>
+                        <option value="Perawat">Perawat</option>
+                        <option value="Bidan">Bidan</option>
+                        <option value="Pensiunan">Pensiunan</option>
+                        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                    </select></div>
+            </div>
+            <div class="mt-4 pt-3 border-top">
+                <button class="btn btn-outline-danger w-100 rounded-pill" onclick="resetFilters()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Reset Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
+
+    <script id="mainScript">
+        var globalData = [];
+        var filteredData = [];
+        var myModal, slider, fModal = null;
+        var currentUser = null;
+
+        var hubRank = { "Kepala Keluarga": 1, "Istri": 2, "Anak": 3, "Orang Tua": 4, "Famili Lain": 5, "Lainnya": 6 };
+        function getHubRank(h) { return hubRank[h] || 99; }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                myModal = new bootstrap.Modal(document.getElementById('formModal'));
+                slider = document.getElementById('ageSlider');
+                if (slider && typeof noUiSlider !== 'undefined') {
+                    noUiSlider.create(slider, { start: [0, 100], connect: true, range: { 'min': 0, 'max': 100 }, step: 1 });
+                    slider.noUiSlider.on('update', function (v) {
+                        var el = document.getElementById('ageLabel');
+                        if (el) el.innerText = Math.round(v[0]) + " - " + Math.round(v[1]) + " Thn";
+                        applyFilters();
+                    });
+                }
+            } catch (e) { console.error("DOMContentLoaded error:", e); }
+
+            var lp = document.getElementById('loginPage');
+            var ac = document.getElementById('appContent');
+            if (lp) lp.style.display = 'flex';
+            if (ac) ac.style.display = 'none';
+        });
+
+        function showLoading(show) {
+            var el = document.getElementById('loading');
+            if (el) el.style.display = show ? 'flex' : 'none';
+        }
+
+        function handleLogin(e) {
+            if (e) e.preventDefault();
+            var uEl = document.getElementById('uName'), pEl = document.getElementById('uPass');
+            if (!uEl || !pEl) return;
+            var u = uEl.value, p = pEl.value;
+            showLoading(true);
+            google.script.run.withSuccessHandler(function (res) {
+                showLoading(false);
+                if (res.success) {
+                    currentUser = { role: res.role, wilayah: res.wilayah, username: res.username };
+                    enterApp();
+                } else {
+                    Swal.fire('Gagal', res.message, 'error');
+                }
+            }).withFailureHandler(function (err) {
+                showLoading(false);
+                Swal.fire('Error', err.message, 'error');
+            }).loginUser(u, p);
+        }
+
+        function loginGuest() {
+            try {
+                console.log("Attempting guest login...");
+                currentUser = { role: 'MEMBER', wilayah: 'All', username: 'Guest' };
+                enterApp();
+            } catch (e) {
+                console.error("loginGuest error:", e);
+                alert("Gagal Masuk: " + e.message);
+            }
+        }
+
+        function togglePassword() {
+            var passInput = document.getElementById('uPass');
+            var checkbox = document.getElementById('showPass');
+            if (passInput && checkbox) {
+                passInput.type = checkbox.checked ? 'text' : 'password';
+            }
+        }
+
+        function doLogout() {
+            currentUser = null;
+            var lp = document.getElementById('loginPage');
+            var ac = document.getElementById('appContent');
+            if (lp) lp.style.display = 'flex';
+            if (ac) ac.style.display = 'none';
+            var un = document.getElementById('uName'), up = document.getElementById('uPass');
+            if (un) un.value = '';
+            if (up) up.value = '';
+            globalData = [];
+        }
+
+        function enterApp() {
+            try {
+                var lp = document.getElementById('loginPage'), ac = document.getElementById('appContent');
+                if (lp) lp.style.display = 'none';
+                if (ac) ac.style.display = 'block';
+
+                var badge = document.getElementById('userBadge'), btnAdd = document.getElementById('btnAdd');
+                if (currentUser) {
+                    var roleName = 'Tamu';
+                    if (currentUser.role === 'SUPER_ADMIN') roleName = 'Admin Utama';
+                    else if (currentUser.role === 'ADMIN_WILAYAH') roleName = 'Admin ' + (currentUser.wilayah || '');
+                    if (badge) badge.innerText = roleName;
+                    if (btnAdd) btnAdd.style.display = (currentUser.role === 'MEMBER') ? 'none' : 'inline-block';
+                    loadData();
+                }
+            } catch (e) { console.error("enterApp error:", e); }
+        }
+
+        function loadData() {
+            console.log("Loading data...");
+            showLoading(true);
+            google.script.run.withSuccessHandler(function (data) {
+                globalData = data.map(function (item) {
+                    item.age = calculateAge(item.tanggalLahir);
+                    return item;
+                });
+                globalData.sort(function (a, b) {
+                    var kkA = a.noKK || "ZZZZ", kkB = b.noKK || "ZZZZ";
+                    if (kkA !== kkB) return kkA.localeCompare(kkB);
+                    var rankA = getHubRank(a.hubKeluarga), rankB = getHubRank(b.hubKeluarga);
+                    if (rankA !== rankB) return rankA - rankB;
+                    if (a.hubKeluarga === 'Anak' && b.hubKeluarga === 'Anak') return b.age - a.age;
+                    return 0;
+                });
+                populateDatalists(globalData);
+                applyFilters();
+                showLoading(false);
+            }).withFailureHandler(function (err) {
+                showLoading(false);
+                Swal.fire('Error', 'Gagal memuat data: ' + err.message, 'error');
+            }).getData();
+        }
+
+        function showBirthdayGreetings() {
+            try {
+                var today = new Date(), tMon = today.getMonth() + 1;
+                var bdays = globalData.filter(function (m) {
+                    if (!m.tanggalLahir) return false;
+                    // Robust parsing for yyyy-mm-dd
+                    var parts = m.tanggalLahir.split('-');
+                    if (parts.length < 3) return false;
+                    var mon = parseInt(parts[1], 10);
+                    return mon === tMon;
+                });
+
+                // Sort by day
+                bdays.sort(function (a, b) {
+                    var dayA = parseInt(a.tanggalLahir.split('-')[2], 10);
+                    var dayB = parseInt(b.tanggalLahir.split('-')[2], 10);
+                    return dayA - dayB;
+                });
+
+                var list = document.getElementById('birthdayList');
+                if (!list) return;
+                list.innerHTML = '';
+                if (bdays.length === 0) {
+                    list.innerHTML = '<div class="text-center py-4 text-muted"><p>Tidak ada yang berulang tahun di bulan ini.</p></div>';
+                } else {
+                    bdays.forEach(function (m) {
+                        var isSuper = currentUser && currentUser.role === 'SUPER_ADMIN';
+                        var item = document.createElement('div');
+                        item.className = 'list-group-item d-flex justify-content-between align-items-center py-3 border-0 border-bottom';
+
+                        var bDayParts = m.tanggalLahir.split('-');
+                        var bDay = parseInt(bDayParts[2], 10);
+                        var isToday = (bDay === today.getDate());
+
+                        var btnHtml = '';
+                        if (isSuper) {
+                            var phone = m.noHp ? m.noHp.replace(/[^0-9]/g, '') : '';
+                            if (phone.startsWith('0')) phone = '62' + phone.substring(1);
+                            var msg = generateBdayMessage(m).replace(/'/g, "\\\'");
+                            btnHtml = '<button class="btn btn-success btn-sm rounded-pill px-3" onclick="sendBdayWA(\'' + phone + '\', \'' + msg + '\')">Kirim WA</button>';
+                        }
+
+                        var badge = isToday ? '<span class="badge bg-danger ms-2 animate-pulse" style="font-size:0.6rem">HARI INI</span>' : '';
+
+                        item.innerHTML = '<div><div class="d-flex align-items-center"><h6 class="mb-0 fw-bold">' + m.nama + '</h6>' + badge + '</div>' +
+                            '<small class="text-muted">' + bDay + ' ' + getMonthName(tMon) + ' | ' + (m.kategorial || '-') + ' | ' + m.age + ' Thn</small></div>' + btnHtml;
+                        list.appendChild(item);
+                    });
+                }
+                var modalEl = document.getElementById('birthdayModal');
+                if (modalEl) {
+                    var bModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    bModal.show();
+                }
+            } catch (e) { console.error("showBirthdayGreetings error:", e); }
+        }
+
+        function getMonthName(m) {
+            var names = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return names[m] || "";
+        }
+
+        function generateBdayMessage(m) {
+            var bDay = "";
+            if (m.tanggalLahir) {
+                var p = m.tanggalLahir.split('-');
+                if (p.length === 3) {
+                    bDay = parseInt(p[2], 10) + " " + getMonthName(parseInt(p[1], 10));
+                }
+            }
+            var jk = normalizeJK(m.jk);
+            var pref = jk === 'L' ? 'Saudara' : 'Saudari';
+            return "Selamat ulang tahun untuk " + pref + " terkasih yang berulang tahun pada " + bDay + "! Kiranya Tuhan selalu menjaga dan memberkati.";
+        }
+
+        function sendBdayWA(p, m) { if (p) window.open('https://wa.me/' + p + '?text=' + encodeURIComponent(m), '_blank'); else alert("No HP Kosong"); }
+        function calculateAge(d) { if (!d) return 0; var b = new Date(d), t = new Date(); if (isNaN(b)) return 0; var a = t.getFullYear() - b.getFullYear(); if (t.getMonth() < b.getMonth() || (t.getMonth() == b.getMonth() && t.getDate() < b.getDate())) a--; return a > 0 ? a : 0; }
+        function normalizeJK(v) { if (!v) return ""; v = v.toString().toLowerCase(); return (v.startsWith("l") || v.includes("laki")) ? "L" : "P"; }
+        function superNormalize(s) { if (!s) return ""; return s.toString().toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s+/g, ' ').trim(); }
+
+        function populateDatalists(data) {
+            var lA = document.getElementById('listAyah'), lI = document.getElementById('listIbu'), lS = document.getElementById('listSuami'), lIs = document.getElementById('listIstri');
+            if (!lA || !lI || !lS || !lIs) return;
+            lA.innerHTML = ''; lI.innerHTML = ''; lS.innerHTML = ''; lIs.innerHTML = '';
+            data.forEach(function (r) {
+                var opt = document.createElement('option'); opt.value = r.nama;
+                var jk = normalizeJK(r.jk);
+                if (jk === 'L') { lA.appendChild(opt.cloneNode(true)); lS.appendChild(opt.cloneNode(true)); }
+                else { lI.appendChild(opt.cloneNode(true)); lIs.appendChild(opt.cloneNode(true)); }
+            });
+        }
+
+        var activePills = { Wilayah: '', Kat: '' };
+        function setPill(t, v) {
+            activePills[t] = v;
+            document.querySelectorAll('[data-pill-' + t.toLowerCase() + ']').forEach(function (b) {
+                b.classList.toggle('active', b.getAttribute('data-pill-' + t.toLowerCase()) === v);
+            });
+            applyFilters();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterPendidikan').value = '';
+            document.getElementById('filterPekerjaan').value = '';
+            document.getElementById('filterJK').value = '';
+            document.getElementById('filterStatusKeluarga').value = '';
+            document.getElementById('filterStatusBergereja').value = '';
+            document.getElementById('filterGolDarah').value = '';
+            if (slider && slider.noUiSlider) slider.noUiSlider.set([0, 100]);
+            setPill('Wilayah', '');
+            setPill('Kat', '');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            try {
+                var searchInput = document.getElementById('searchInput');
+                if (!searchInput) return;
+                var term = searchInput.value.toLowerCase();
+
+                // Advanced filters from drawer
+                var fPendidikan = document.getElementById('filterPendidikan').value;
+                var fPekerjaan = document.getElementById('filterPekerjaan').value;
+                var fJK = document.getElementById('filterJK').value;
+                var fStatusKeluarga = document.getElementById('filterStatusKeluarga').value;
+                var fStatusBergereja = document.getElementById('filterStatusBergereja').value;
+                var fGolDarah = document.getElementById('filterGolDarah').value;
+
+                // Age range from slider
+                var ageMin = 0, ageMax = 100;
+                if (slider && slider.noUiSlider) {
+                    var vals = slider.noUiSlider.get();
+                    ageMin = parseInt(vals[0], 10);
+                    ageMax = parseInt(vals[1], 10);
+                }
+
+                filteredData = globalData.filter(function (r) {
+                    var matchText = (term === "" || (r.nama + " " + r.nik + " " + r.noKK).toLowerCase().includes(term));
+                    var matchWil = activePills.Wilayah === "" || r.wilayah === activePills.Wilayah;
+                    var matchKat = activePills.Kat === "" || (r.kategorial || "").toLowerCase().includes(activePills.Kat.toLowerCase());
+                    var matchAge = (r.age >= ageMin && r.age <= ageMax);
+
+                    var matchPend = (fPendidikan === "" || r.pendidikan === fPendidikan);
+                    var matchPek = (fPekerjaan === "" || r.pekerjaan === fPekerjaan);
+                    var matchJK = (fJK === "" || normalizeJK(r.jk) === fJK);
+                    var matchSK = (fStatusKeluarga === "" || r.statusKeluarga === fStatusKeluarga);
+                    var matchSB = (fStatusBergereja === "" || r.statusBergereja === fStatusBergereja);
+                    var matchGol = (fGolDarah === "" || r.golDarah === fGolDarah);
+
+                    return matchText && matchWil && matchKat && matchAge && matchPend && matchPek && matchJK && matchSK && matchSB && matchGol;
+                });
+
+                renderTable(filteredData);
+                var fc = document.getElementById('filterCount'); if (fc) fc.innerText = filteredData.length + " Data";
+
+                // Update active filter dot
+                var dot = document.getElementById('filterActiveDot');
+                if (dot) {
+                    var isFiltered = (activePills.Wilayah !== "" || activePills.Kat !== "" || ageMin > 0 || ageMax < 100 ||
+                        fPendidikan !== "" || fPekerjaan !== "" || fJK !== "" || fStatusKeluarga !== "" || fStatusBergereja !== "" || fGolDarah !== "");
+                    dot.style.display = isFiltered ? 'block' : 'none';
+                }
+            } catch (e) { console.error("applyFilters error:", e); }
+        }
+
+        function renderTable(data) {
+            var vGrid = document.getElementById('viewModeGrid');
+            var isGrid = vGrid ? vGrid.checked : false;
+            var tbody = document.getElementById('tableBody'), grid = document.getElementById('gridView');
+            var isGuest = (currentUser && currentUser.role === 'MEMBER');
+            var isSuper = (currentUser && currentUser.role === 'SUPER_ADMIN');
+
+            // Update Header
+            var header = document.getElementById('tableActionHeader');
+            if (header) header.innerText = isGuest ? 'Pekerjaan' : 'Aksi';
+
+            if (tbody) tbody.innerHTML = ''; if (grid) grid.innerHTML = '';
+            var empty = document.getElementById('emptyState');
+            if (!data.length) { if (empty) empty.classList.remove('d-none'); return; }
+            if (empty) empty.classList.add('d-none');
+
+            var tableEl = document.querySelector('.table-custom');
+            if (tableEl) tableEl.classList.toggle('d-none', isGrid);
+            if (grid) grid.classList.toggle('d-none', !isGrid);
+
+            data.forEach(function (r, i) {
+                var jkIcon = normalizeJK(r.jk) === 'L' ? '<span class="text-primary">♂</span>' : '<span style="color:#e91e63">♀</span>';
+                var nikDisplay = isGuest ? '******' : (r.nik || '-');
+                if (isGrid) {
+                    var delBtn = (isSuper || (currentUser.role === 'ADMIN_WILAYAH' && currentUser.wilayah === r.wilayah))
+                        ? '<button class="btn btn-link text-danger p-0 ms-2" title="Hapus" onclick="event.stopPropagation(); deleteData(\'' + r.id + '\')"><i class="bi bi-trash"></i></button>'
+                        : '';
+                    var col = document.createElement('div'); col.className = 'col-sm-6 col-md-4 col-lg-3';
+                    // Hide No KK and Hubungan for guests
+                    var kkDisplay = isGuest ? '' : ((r.noKK || '-') + ' | ');
+                    var hubDisplay = isGuest ? '' : '<div class="small"><b>' + (r.hubKeluarga || '-') + '</b></div>';
+                    col.innerHTML = '<div class="card p-3 h-100 shadow-sm member-card" onclick="showDetails(' + i + ')">' +
+                        '<div class="mb-2"><h6 class="mb-0 fw-bold">' + r.nama + '</h6><small>' + kkDisplay + 'NIK: ' + nikDisplay + '</small></div>' +
+                        hubDisplay +
+                        '<div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">' +
+                        '<span>' + jkIcon + '</span>' +
+                        '<div>' + delBtn + ' <span class="badge bg-light text-dark border ms-1">' + r.age + ' Thn</span></div>' +
+                        '</div></div>';
+                    if (grid) grid.appendChild(col);
+                } else {
+                    var tr = document.createElement('tr');
+                    tr.onclick = function () { toggleMobileRow(this); };
+                    var actionBtns = '';
+                    if (!isGuest) {
+                        if (isSuper || (currentUser.role === 'ADMIN_WILAYAH' && currentUser.wilayah === r.wilayah)) {
+                            actionBtns += '<button class="btn btn-xs btn-outline-primary me-1" style="padding: 2px 5px; font-size: 0.75rem;" title="Edit" onclick="event.stopPropagation(); editDataByIndex(' + i + ')"><i class="bi bi-pencil"></i></button>';
+                            actionBtns += '<button class="btn btn-xs btn-outline-danger" style="padding: 2px 5px; font-size: 0.75rem;" title="Hapus" onclick="event.stopPropagation(); deleteData(\'' + r.id + '\')"><i class="bi bi-trash"></i></button>';
+                        }
+                    }
+                    // Hide No KK and Hubungan for guests
+                    var kkDisplay = isGuest ? '' : ((r.noKK || '-') + ' | ');
+                    var hubInfo = isGuest ? '' : (' | ' + r.hubKeluarga);
+                    var hubCell = isGuest ? '' : '<td data-label="Hubungan"><span class="text-primary" style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation(); showFamilyTree(\'' + r.noKK + '\', \'' + r.hubKeluarga + '\', \'' + r.nama + '\')">' + (r.hubKeluarga || '-') + '</span></td>';
+
+                    tr.innerHTML = '<td class="super-only" data-label="ID">' + r.id + '</td>' +
+                        (isGuest ? '' : '<td data-label="No KK">' + (r.noKK || '-') + '</td>') +
+                        '<td class="name-cell-mobile"><div><div class="fw-bold">' + r.nama + '</div><small class="text-muted">' + kkDisplay + 'NIK: ' + nikDisplay + hubInfo + '</small></div><i class="bi bi-chevron-down mobile-chevron d-md-none"></i></td>' +
+                        hubCell +
+                        '<td data-label="JK">' + jkIcon + '</td>' +
+                        '<td data-label="Umur">' + r.age + '</td>' +
+                        '<td data-label="Pendidikan">' + (r.pendidikan || '-') + '</td>' +
+                        '<td data-label="Wilayah">' + r.wilayah + '</td>' +
+                        '<td data-label="Gol Drh">' + (r.golDarah || '-') + '</td>' +
+                        '<td data-label="Catatan">' + (r.catatan || '-') + '</td>' +
+                        '<td class="text-start" data-label="' + (isGuest ? 'Pekerjaan' : 'Aksi') + '">' + (isGuest ? (r.pekerjaan || '-') : actionBtns) + '</td>';
+                    if (tbody) tbody.appendChild(tr);
+                }
+            });
+            if (isSuper) document.body.classList.add('is-super'); else document.body.classList.remove('is-super');
+        }
+
+        function toggleMobileRow(tr) {
+            if (window.innerWidth > 768) return;
+            var wasExpanded = tr.classList.contains('expanded');
+            document.querySelectorAll('.table-custom tr.expanded').forEach(function (row) { row.classList.remove('expanded'); });
+            if (!wasExpanded) tr.classList.add('expanded');
+        }
+        function showDetails(index) {
+            var r = filteredData[index];
+            if (!r) return;
+            var isGuest = (currentUser && currentUser.role === 'MEMBER');
+            var dn = document.getElementById('detailNama'); if (dn) dn.innerText = r.nama;
+            var dc = document.getElementById('detailContent');
+            if (dc) {
+                var html = '<div class="row g-3">';
+                var fields = [];
+
+                // Add No KK and Hubungan only for non-guests
+                if (!isGuest) {
+                    fields.push({ l: 'No KK', v: r.noKK });
+                    fields.push({ l: 'Hubungan', v: r.hubKeluarga });
+                }
+
+                fields.push({ l: 'Jenis Kelamin', v: r.jk });
+                fields.push({ l: 'Umur', v: r.age + ' Thn' });
+                fields.push({ l: 'Pendidikan', v: r.pendidikan });
+                fields.push({ l: 'Wilayah', v: r.wilayah });
+
+                // Add family member names only for non-guests
+                if (!isGuest) {
+                    if (r.hubKeluarga === 'Kepala Keluarga') {
+                        fields.push({ l: 'Nama Istri', v: r.namaIstri });
+                    } else if (r.hubKeluarga === 'Istri') {
+                        fields.push({ l: 'Nama Suami', v: r.namaSuami });
+                    } else if (r.hubKeluarga === 'Anak') {
+                        fields.push({ l: 'Nama Ayah', v: r.namaAyah });
+                        fields.push({ l: 'Nama Ibu', v: r.namaIbu });
+                    }
+                }
+
+                var moreFields = [
+                    { l: 'Golg. Darah', v: r.golDarah },
+                    { l: 'Tempat Lahir', v: r.tempatLahir },
+                    { l: 'Status Keluarga', v: r.statusKeluarga },
+                    { l: 'Status Bergereja', v: r.statusBergereja },
+                    { l: 'No HP', v: r.noHp },
+                    { l: 'Tgl Baptis', v: r.tanggalBaptis },
+                    { l: 'Tgl Kematian', v: r.tanggalKematian },
+                    { l: 'Kategorial', v: r.kategorial },
+                    { l: 'Pekerjaan', v: r.pekerjaan },
+                    { l: 'Catatan', v: r.catatan }
+                ];
+
+                // Add Tanggal Lahir and Alamat only for non-guests
+                if (!isGuest) {
+                    moreFields.splice(2, 0, { l: 'Tgl Lahir', v: r.tanggalLahir });
+                    moreFields.splice(6, 0, { l: 'Alamat', v: r.alamat });
+                }
+                fields = fields.concat(moreFields);
+
+                fields.forEach(function (f) {
+                    html += '<div class="col-6 col-md-4"><label class="small text-muted fw-bold text-uppercase d-block">' + f.l + '</label><div class="border-bottom pb-1">' + (f.v || '-') + '</div></div>';
+                });
+                html += '</div>';
+                dc.innerHTML = html;
+            }
+            var dModalEl = document.getElementById('detailModal');
+            var footer = document.getElementById('detailFooter');
+            var btnEdit = document.getElementById('btnEditFromDetail');
+
+            if (footer && btnEdit) {
+                var isGuest = (currentUser && currentUser.role === 'MEMBER');
+                var canEdit = !isGuest && (currentUser.role === 'SUPER_ADMIN' || (currentUser.role === 'ADMIN_WILAYAH' && currentUser.wilayah === r.wilayah));
+
+                if (canEdit) {
+                    footer.classList.remove('d-none');
+                    btnEdit.onclick = function () {
+                        var modalInstance = bootstrap.Modal.getInstance(dModalEl);
+                        if (modalInstance) modalInstance.hide();
+                        editDataByIndex(index);
+                    };
+                } else {
+                    footer.classList.add('d-none');
+                }
+            }
+
+            var dModal = bootstrap.Modal.getOrCreateInstance(dModalEl);
+            dModal.show();
+        }
+
+        function showFamilyTree(noKK, role, name) {
+            if (!noKK || noKK === '-') return;
+            var members = globalData.filter(function (m) { return m.noKK === noKK; });
+            var container = document.getElementById('familyListContainer');
+            if (!container) return;
+            container.innerHTML = '<div class="list-group">' + members.map(function (m) {
+                var roleIcon = '';
+                if (m.hubKeluarga === 'Kepala Keluarga') roleIcon = '👑 ';
+                else if (m.hubKeluarga === 'Istri') roleIcon = '👩 ';
+                else if (m.hubKeluarga === 'Anak') roleIcon = '🧒 ';
+                var jkI = normalizeJK(m.jk) === 'L' ? '♂' : '♀';
+                var isGuest = (currentUser && currentUser.role === 'MEMBER');
+                var nikDisplay = isGuest ? '******' : (m.nik || '-');
+                return '<div class="list-group-item d-flex justify-content-between align-items-center mb-1 border-0 shadow-sm rounded-3"><div><h6 class="mb-0 fw-bold">' + roleIcon + m.nama + ' ' + jkI + '</h6><small class="text-muted">' + m.hubKeluarga + ' | NIK: ' + nikDisplay + '</small></div><span class="badge bg-light text-dark border">' + m.age + ' Thn</span></div>';
+            }).join('') + '</div>';
+            if (!fModal) fModal = new bootstrap.Modal(document.getElementById('familyModal'));
+            fModal.show();
+        }
+
+        function openModal(mode, data) {
+            if (!currentUser || currentUser.role === 'MEMBER') return;
+            if (mode === 'edit' && data) {
+                var canEdit = (currentUser.role === 'SUPER_ADMIN' || (currentUser.role === 'ADMIN_WILAYAH' && currentUser.wilayah === data.wilayah));
+                if (!canEdit) { Swal.fire('Akses Ditolak', 'Anda hanya dapat mengedit warga di wilayah ' + currentUser.wilayah, 'error'); return; }
+            }
+            var form = document.getElementById('wargaForm'); if (form) form.reset();
+            var idInp = document.getElementById('dataId'); if (idInp) idInp.value = '';
+            if (mode === 'edit' && data) {
+                var fields = ['nik', 'noKK', 'nama', 'jk', 'hubKeluarga', 'golDarah', 'tanggalLahir', 'tempatLahir', 'namaSuami', 'namaIstri', 'namaAyah', 'namaIbu', 'pendidikan', 'wilayah', 'statusKeluarga', 'statusBergereja', 'alamat', 'noHp', 'tanggalBaptis', 'tanggalKematian', 'catatan', 'kategorial', 'pekerjaan'];
+                var idEl = document.getElementById('dataId'); if (idEl) idEl.value = data.id || '';
+                fields.forEach(function (f) { var el = document.getElementById(f); if (el) el.value = data[f] || ''; });
+            }
+            if (myModal) {
+                myModal.show();
+                toggleSpouseFields(); // Inisialisasi state field
+            }
+        }
+
+        function editDataByIndex(index) { var d = filteredData[index]; if (d) openModal('edit', d); }
+
+        function handleFormSubmit(e) {
+            if (e) e.preventDefault();
+            var fields = ['id', 'nik', 'noKK', 'nama', 'jk', 'hubKeluarga', 'golDarah', 'tanggalLahir', 'tempatLahir', 'namaSuami', 'namaIstri', 'namaAyah', 'namaIbu', 'pendidikan', 'wilayah', 'statusKeluarga', 'statusBergereja', 'alamat', 'noHp', 'tanggalBaptis', 'tanggalKematian', 'catatan', 'kategorial', 'pekerjaan'];
+            var obj = {}; fields.forEach(function (f) { var el = document.getElementById(f === 'id' ? 'dataId' : f); if (el) obj[f] = el.value; });
+
+            showLoading(true); if (myModal) myModal.hide();
+            var hS = function () { Swal.fire('Sukses'); loadData(); };
+            var hF = function (err) { showLoading(false); Swal.fire('Error', err.message); };
+            var runner = google.script.run.withSuccessHandler(hS).withFailureHandler(hF);
+            if (obj.id) runner.updateData(obj, currentUser); else runner.addData(obj, currentUser);
+        }
+
+        function deleteData(id) {
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(function (r) {
+                if (r.isConfirmed) {
+                    showLoading(true);
+                    google.script.run.withSuccessHandler(function () { Swal.fire('Terhapus'); loadData(); }).withFailureHandler(function (e) { showLoading(false); Swal.fire('Error', e.message); }).deleteData(id, currentUser);
+                }
+            });
+        }
+        function togglePassword() { var x = document.getElementById("uPass"); if (x) x.type = (x.type === "password") ? "text" : "password"; }
+        function toggleSpouseFields() {
+            try {
+                var hub = document.getElementById('hubKeluarga').value;
+                var jkEl = document.getElementById('jk');
+                var jk = jkEl ? normalizeJK(jkEl.value) : '';
+                var nSuami = document.getElementById('namaSuami');
+                var nIstri = document.getElementById('namaIstri');
+
+                if (!nSuami || !nIstri) return;
+
+                // Reset state
+                nSuami.disabled = false;
+                nIstri.disabled = false;
+                nSuami.style.backgroundColor = "";
+                nIstri.style.backgroundColor = "";
+
+                if (hub === 'Istri') {
+                    // Dia adalah Istri, maka Nama Istri tidak perlu diisi (dia sendiri)
+                    nIstri.disabled = true;
+                    nIstri.value = '';
+                    nIstri.style.backgroundColor = "#e9ecef";
+                } else if (hub === 'Kepala Keluarga') {
+                    if (jk === 'L') {
+                        // Dia adalah Suami/KK Laki-laki, maka Nama Suami tidak perlu diisi
+                        nSuami.disabled = true;
+                        nSuami.value = '';
+                        nSuami.style.backgroundColor = "#e9ecef";
+                    } else if (jk === 'P') {
+                        // Dia adalah KK Perempuan (Single Parent/Janda), Nama Suami tetap dibuka sesuai permintaan
+                        nIstri.disabled = true;
+                        nIstri.value = '';
+                        nIstri.style.backgroundColor = "#e9ecef";
+                    }
+                } else if (hub === 'Anak') {
+                    // Anak biasanya tidak mengisi Suami/Istri di form ini
+                    nSuami.disabled = true; nSuami.value = ''; nSuami.style.backgroundColor = "#e9ecef";
+                    nIstri.disabled = true; nIstri.value = ''; nIstri.style.backgroundColor = "#e9ecef";
+                }
+            } catch (e) { console.error("toggleSpouseFields error:", e); }
+        }
+
+        function checkSmartLink(el, type) { /* Placeholder for smart linking logic */ }
+
+        window.onscroll = function () {
+            var btt = document.getElementById("backToTop");
+            if (btt) {
+                if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                    btt.style.display = "flex";
+                } else {
+                    btt.style.display = "none";
+                }
+            }
+        };
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+    </script>
+</body>
+
+</html>
